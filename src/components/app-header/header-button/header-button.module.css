@@ -1,0 +1,16 @@
+.button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    min-width: 178px;
+    height: 56px;
+    box-sizing: border-box;
+    padding: 16px 20px;
+    margin: 16px 8px;
+    border-radius: 40px;
+}
+
+.primary {
+    margin-left: 6px;
+}

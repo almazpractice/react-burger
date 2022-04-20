@@ -1,0 +1,4 @@
+.header {
+    display: flex;
+    padding: 0 calc((100% - 1280px)/2);
+}

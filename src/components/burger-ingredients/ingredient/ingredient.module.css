@@ -1,0 +1,10 @@
+.ingredient {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 272px;
+    height: 208px;
+     text-align: center;
+}
