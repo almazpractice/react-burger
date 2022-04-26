@@ -8,6 +8,24 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+    scrollbar-width: 8px;
+    scrollbar-color: #2F2F37 #8585AD;
+  }
+  
+  /* для Chrome/Edge/Safari */
+*::-webkit-scrollbar {
+    width: 8px;
+}
+*::-webkit-scrollbar-track {
+    background: #2F2F37;;
+}
+*::-webkit-scrollbar-thumb {
+    background-color: #8585AD;
+}
+
+
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -17,6 +35,7 @@ code {
     display: flex;
     justify-content: center;
     max-height: calc(100vh - 128px);
-    padding: 0;
+    max-width: 1240px;
+    padding: 0 20px;
     margin: 0 auto;
 }

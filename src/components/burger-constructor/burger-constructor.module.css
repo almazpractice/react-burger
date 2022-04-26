@@ -1,25 +1,28 @@
 .constructorSection {
-    width: 600px;
-    margin: 0 20px;
+    width: calc(100%/2 - 20px);
+    margin: 0 auto;
     margin-bottom: 40px;
 }
 
 .list {
     display: flex;
-    max-height: calc(100vh - 324px);
-    overflow-x: scroll;
+    flex-direction: column;
+}
+
+.saucesMains {
+    max-height: calc(100vh - 516px);
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .ingredient {
-    display: flex;
-    align-items: center;
     margin: 8px;
-    cursor: pointer;
 }
 
-.drag {
-    display: flex;
-    justify-content: center;
-    width: 24px;
-    align-items: center;
+.ingredient:last-child {
+    margin-bottom: 0;
+}
+
+.ingredient:first-child {
+    margin-top: 0;
 }

@@ -11,6 +11,16 @@
     border-radius: 40px;
 }
 
-.primary {
-    margin-left: 6px;
+
+@media screen and (max-width: 575px) {
+    .button {
+        padding: 4px 10px;
+        margin: 6px 4px;
+    }
+    .text {
+        display: none;
+    }
+    .text {
+        font-size: 10px;
+    }
 }

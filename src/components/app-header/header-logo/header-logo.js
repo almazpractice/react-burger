@@ -3,11 +3,10 @@ import logoStyles from "./header-logo.module.css"
 import backgroundImage from '../../../images/logo-text.png'
 
 
-const logoBackground = {
-    background: `url(${backgroundImage})`
-}
-
-const HeaderLogo = (props) => {
+const HeaderLogo = () => {
+    const logoBackground = {
+        background: `url(${backgroundImage})`
+    }
     return (
         <div className={`${logoBackground} ${logoStyles.logo}`}>
             <Logo />

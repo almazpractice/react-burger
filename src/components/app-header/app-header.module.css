@@ -2,3 +2,8 @@
     display: flex;
     padding: 0 calc((100% - 1280px)/2);
 }
+@media screen and (max-width: 886px) {
+    .header {
+        justify-content: space-between;
+    }
+}

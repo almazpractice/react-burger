@@ -1,0 +1,10 @@
+.sectionOrder {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.currencyIcon {
+    display: flex;
+    align-items: 'center'
+}
