@@ -7,11 +7,12 @@
     width: calc(100%/2 - 38px);
     height: 208px;
     text-align: center;
+    cursor: pointer;
 }
 
 .price {
     text-align: center;
     align-items: center;
     display: flex;
-    justify-content: center
+    justify-content: center;
 }

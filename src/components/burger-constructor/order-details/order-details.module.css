@@ -45,31 +45,3 @@
 .accepted {
     cursor: pointer;
 }
-/* 
-.detailsContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-basis: 575px;
-    width: 640px;
-    margin: auto;
-}
-
-.image {
-    display: flex;
-    height: 240px;
-    justify-content: center;
-}
-
-.specsList {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-}
-
-.specsListItem {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: var(--text-secondary-dark-grey);
-} */

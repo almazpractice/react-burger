@@ -6,7 +6,7 @@ import { ModalOverlay } from '../modal-overlay/modal-overlay';
 import PropTypes from 'prop-types';
 
 
-function Modal ({children, header, isVisible, onClose}) {
+function Modal ({children, header, onClose}) {
     const modalRoot = document.getElementById("react-modals");
 
     useEffect(() => {
@@ -27,8 +27,7 @@ function Modal ({children, header, isVisible, onClose}) {
     } 
     
     return ReactDOM.createPortal(
-        <> {isVisible && 
-            <>
+        <>
             <div className={`${modalStyles.modal} p-10`}>
               <div className={modalStyles.modalHeader} data-test="modal-header" onClick={handleClick}>
                 {header && (<p className={`${modalStyles.modalTitle} text text_type_main-large`}>{header}</p>)}
@@ -42,9 +41,7 @@ function Modal ({children, header, isVisible, onClose}) {
               </div>
             </div>
             <ModalOverlay onClose={closeModal}/>
-            </>
-        }
-      </>,
+        </>,
         modalRoot
       );
 }
@@ -52,7 +49,6 @@ function Modal ({children, header, isVisible, onClose}) {
 Modal.propTypes = {
     children: PropTypes.node,
     header: PropTypes.string,
-    isVisible: PropTypes.bool,
     onClose: PropTypes.func
 }
 export default Modal

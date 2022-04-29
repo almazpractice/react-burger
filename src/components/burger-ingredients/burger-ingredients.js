@@ -1,14 +1,19 @@
 import ingredientsStyles from './burger-ingredients.module.css';
 import Ingredient from './ingredient/ingredient';
 import IngredientsTab from './ingredients-tab/ingredients-tab';
+import IngredientDetails from "./ingredient-details/ingredient-details";
+import {ingredientType} from "../../utils/data-type";
 import PropTypes from 'prop-types';
-import dataPropTypes from '../../utils/data-type';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import {useVisible} from '../../hooks/use-visible';
 
 
-const BurgerIngredients = React.memo(({data, addIngredient, isLoading}) => {
+
+const BurgerIngredients = React.memo(({data, isLoading}) => {
     const [tab, setTab] = React.useState('buns')
+    const [showDetails, toggleDetailView] = useVisible()
+    const [selectedItem, setSelectedItem] = useState(null)
+
 
     const bunsElem = document.getElementById("buns");
     const saucesElem = document.getElementById("sauces");
@@ -30,8 +35,15 @@ const BurgerIngredients = React.memo(({data, addIngredient, isLoading}) => {
     }, [tab])
 
 
+    const openDetailModal = (e) => {
+        let id = e.currentTarget.getAttribute('data-id');
+        setSelectedItem(data.filter(x => x._id === id)[0]);
+        toggleDetailView();
+    }
+
     return(
         <section className={ingredientsStyles.ingredientsSection} >
+            {showDetails && <IngredientDetails onClose={toggleDetailView} ingredient={selectedItem}/>}
             <div>
             <p className={`text text_type_main-large mt-10 mb-5 ${ingredientsStyles.title}`}>
                 Соберите бургер
@@ -42,17 +54,44 @@ const BurgerIngredients = React.memo(({data, addIngredient, isLoading}) => {
             ? <p className="text text_type_main-medium mt-10">Загрузка данных...</p> 
             : (
                 <div className={ingredientsStyles.list}>
-                    <div id="buns" ref={bunsRef} className={ingredientsStyles.title}><p className="text text_type_main-medium mt-10">Булки</p></div>
+                    <div id="buns" ref={bunsRef} className={ingredientsStyles.title}>
+                        <p className="text text_type_main-medium mt-10">Булки</p>
+                    </div>
                     {data.map( (ingredient, index) => (
-                        ingredient.type==='bun' ?  <Ingredient key={ingredient._id} ingredient={ingredient} addIngredient={addIngredient} /> : ''
+                        ingredient.type==='bun'
+                            ?  <Ingredient
+                                    key={ingredient._id}
+                                    ingredient={ingredient}
+                                    openModal={openDetailModal}
+                                    dataId={ingredient._id}
+                                />
+                            : ''
                     ))}
-                    <div id="sauces" ref={saucesRef} className={ingredientsStyles.title}><p className="text text_type_main-medium mt-10">Соусы</p></div>
+                    <div id="sauces" ref={saucesRef} className={ingredientsStyles.title}>
+                        <p className="text text_type_main-medium mt-10">Соусы</p>
+                    </div>
                     {data.map( (ingredient, index) => (
-                        ingredient.type==='sauce' ?  <Ingredient key={ingredient._id} ingredient={ingredient} addIngredient={addIngredient} /> : ''
+                        ingredient.type==='sauce'
+                            ?  <Ingredient
+                                    key={ingredient._id}
+                                    ingredient={ingredient}
+                                    openModal={openDetailModal}
+                                    dataId={ingredient._id}
+                                />
+                            : ''
                     ))}
-                    <div id="stuffing" ref={mainRef} className={ingredientsStyles.title}><p className="text text_type_main-medium mt-10">Начинка</p></div>
+                    <div id="stuffing" ref={mainRef} className={ingredientsStyles.title}>
+                        <p className="text text_type_main-medium mt-10">Начинка</p>
+                    </div>
                     {data.map( (ingredient, index) => (
-                        ingredient.type==='main' ?  <Ingredient key={ingredient._id} ingredient={ingredient} addIngredient={addIngredient} /> : ''
+                        ingredient.type==='main'
+                        ?  <Ingredient
+                            key={ingredient._id}
+                            ingredient={ingredient}
+                            openModal={openDetailModal}
+                            dataId={ingredient._id}
+                        />
+                        : ''
                     ))}
                 </div>
             )}
@@ -62,9 +101,8 @@ const BurgerIngredients = React.memo(({data, addIngredient, isLoading}) => {
 })
 
 
-BurgerConstructor.propTypes = {
-    data: dataPropTypes,
-    addIngredient: PropTypes.func,
+BurgerIngredients.propTypes = {
+    data: PropTypes.arrayOf(ingredientType).isRequired,
     isLoading: PropTypes.bool
 }
 

@@ -5,6 +5,7 @@
     width: 289px;
     height: 40px;
     margin: auto;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 886px) {

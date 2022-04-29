@@ -1,6 +1,7 @@
 .header {
     display: flex;
     padding: 0 calc((100% - 1280px)/2);
+    background-color: #1C1C21;
 }
 @media screen and (max-width: 886px) {
     .header {

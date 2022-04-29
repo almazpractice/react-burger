@@ -1,16 +1,17 @@
-import Modal from '../modal/modal';
-import PropertiesText from './properties-text/properties-text';
 import detailsStyles from './ingredient-details.module.css';
-import { ModalOverlay } from '../modal-overlay/modal-overlay';
+import {ingredientType} from "../../../utils/data-type";
+import Modal from '../../modal/modal';
+import { ModalOverlay } from '../../modal-overlay/modal-overlay';
+import PropertiesText from './properties-text/properties-text';
 import PropTypes from 'prop-types';
 
 
 
-function IngredientDetails ({ingredient, onClose, isVisible}) {
+function IngredientDetails ({ingredient, onClose}) {
 
     return (
         <>
-            <Modal onClose={onClose} isVisible={isVisible} header={"Детали ингредиента"}>
+            <Modal onClose={onClose} header={"Детали ингредиента"}>
                 <section className={`${detailsStyles.detailSection} p-10 pb-5`}>
                     <img src={ingredient.image_large} alt={ingredient.name} />
                     <p className="text text_type_main-medium mt-3 mb-8"> {ingredient.name}</p>
@@ -22,16 +23,15 @@ function IngredientDetails ({ingredient, onClose, isVisible}) {
                     </div>
                 </section>
             </Modal>
-            <ModalOverlay onClose={onClose} isVisible={isVisible}/>
+            <ModalOverlay onClose={onClose}/>
         </>
     )
 }
 
 
 IngredientDetails.propTypes = {
-    ingredient: PropTypes.object,
+    ingredient: PropTypes.arrayOf(ingredientType).isRequired,
     onClose: PropTypes.func,
-    isVisible: PropTypes.bool
 }
 
 export default IngredientDetails

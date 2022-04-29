@@ -1,85 +1,76 @@
 import constructorStyles from './burger-constructor.module.css';
-import SumOrder from './sum-order/sum-order';
 import IngredientConstructor from './igredient-constructor/igredient-constructor';
-import PropTypes from 'prop-types';
-import dataPropTypes from '../../utils/data-type';
-import IngredientDetails from './ingredient-details/ingredient-details';
-import {useVisible} from '../../hooks/use-visible';
-import { useState } from 'react';
+import {ingredientType} from '../../utils/data-type';
 import OrderDetails from './order-details/order-details';
+import PropTypes from 'prop-types';
+import React from "react";
+import SumOrder from './sum-order/sum-order';
+import {useVisible} from '../../hooks/use-visible';
 
 
-
-const BurgerConstructor = ({ data, total, removeIngredient }) => {
-    const [showDetails, toggleDetailView] = useVisible()
+const BurgerConstructor = React.memo(({ card, total }) => {
     const [showOrder, toggleOrderView] = useVisible()
-    const [orderNumber, setOrderNumber] = useState(34536);
-    const [selectedItem, setSelectedItem] = useState(null)
-    const choosedBun = data.find((ingredient) => (ingredient.type === 'bun' && ingredient.__v > 0))
+    const [orderNumber, setOrderNumber] = React.useState(34536);
+    const chosenBun = card.find((ingredient) => (ingredient.type === 'bun' && ingredient.__v > 0))
 
 
-    const openDetailModal = (e) => {
-        let id = e.currentTarget.getAttribute('data-id');
-        setSelectedItem(data.filter(x => x._id === id)[0]);
-        toggleDetailView();
-    }
     const openOrderModal = () => {
         setOrderNumber(orderNumber+1);
         toggleOrderView()
     }
-    
+
     return (
         <section className={`${constructorStyles.constructorSection} pt-25`}>
-            {showDetails && <IngredientDetails onClose={toggleDetailView} isVisible={showDetails} ingredient={selectedItem}/>}
             <div className={constructorStyles.list} >
-                {choosedBun
+                {chosenBun
                     ? (
-                        <div className={constructorStyles.ingredient} onClick={openDetailModal} data-id={choosedBun._id}>
-                            <IngredientConstructor 
-                                ingredient={choosedBun}
+                        <div className={constructorStyles.ingredient} >
+                            <IngredientConstructor
+                                ingredient={chosenBun}
                                 type={'top'}
                                 text={'(верх)'}
-                                removeIngredient={removeIngredient}
                             />
                         </div>)
                     : ''
                 }
                 <div className={constructorStyles.saucesMains}>
-                {data.map( (ingredient, index) => {
-                    return (
-                        (ingredient.__v > 0 && ingredient.type !== 'bun') ? (
-                            <div key={ingredient._id} className={constructorStyles.ingredient} onClick={openDetailModal} data-id={ingredient._id}>
-                                    <IngredientConstructor  ingredient={ingredient} removeIngredient={removeIngredient} openModal={openDetailModal}/>
+                    {card.length > 0 && card.map((ingredient, index) => {
+                        const randomIndex = Math.floor(Math.random() * index)
+                        return (
+                            (ingredient.__v > 0 && ingredient.type !== 'bun') ? (
+                                // в key комбинация _id + randomIndex для возможности повторения ингредиентов
+                                <div key={ingredient._id + randomIndex} className={constructorStyles.ingredient} >
+                                    <IngredientConstructor
+                                        ingredient={ingredient}
+                                    />
                                 </div>
                             ) : ''
-                            )
-                        } )}
+                        )
+                    })}
                 </div>
-                {choosedBun
-                    ? (<div className={constructorStyles.ingredient} data-id={choosedBun._id} onClick={openDetailModal}>
-                            <IngredientConstructor 
-                                ingredient={choosedBun}
-                                type={'bottom'}
-                                text={'(низ)'}
-                                removeIngredient={removeIngredient}
-                                />
-                        </div>)
+                {chosenBun
+                    ? (<div className={constructorStyles.ingredient} >
+                        <IngredientConstructor
+                            ingredient={chosenBun}
+                            type={'bottom'}
+                            text={'(низ)'}
+                        />
+                    </div>)
                     : ''
                 }
             </div>
             <div>
                 <SumOrder total={total} openModal={openOrderModal}/>
             </div>
-            {showOrder && <OrderDetails onClose={toggleOrderView} isVisible={showOrder} order={orderNumber}/>}
+            {showOrder && <OrderDetails onClose={toggleOrderView} order={orderNumber}/>}
         </section>
     )
-}
+})
 
 
 BurgerConstructor.propTypes = {
-    data: dataPropTypes,
+    card: PropTypes.arrayOf(ingredientType).isRequired,
     total: PropTypes.number,
-    removeIngredient: PropTypes.func
 }
 
 
