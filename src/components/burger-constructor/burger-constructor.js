@@ -8,10 +8,10 @@ import SumOrder from './sum-order/sum-order';
 import {useVisible} from '../../hooks/use-visible';
 
 
-const BurgerConstructor = React.memo(({ card, total }) => {
+const BurgerConstructor = React.memo(({ ingredients, total }) => {
     const [showOrder, toggleOrderView] = useVisible()
     const [orderNumber, setOrderNumber] = React.useState(34536);
-    const chosenBun = card.find((ingredient) => (ingredient.type === 'bun' && ingredient.__v > 0))
+    const chosenBun = ingredients.find((ingredient) => (ingredient.type === 'bun' && ingredient.__v > 0))
 
 
     const openOrderModal = () => {
@@ -34,12 +34,10 @@ const BurgerConstructor = React.memo(({ card, total }) => {
                     : ''
                 }
                 <div className={constructorStyles.saucesMains}>
-                    {card.length > 0 && card.map((ingredient, index) => {
-                        const randomIndex = Math.floor(Math.random() * index)
+                    {ingredients.length > 0 && ingredients.map((ingredient, index) => {
                         return (
                             (ingredient.__v > 0 && ingredient.type !== 'bun') ? (
-                                // в key комбинация _id + randomIndex для возможности повторения ингредиентов
-                                <div key={ingredient._id + randomIndex} className={constructorStyles.ingredient} >
+                                <div key={ingredient._id + ingredient.uuid} className={constructorStyles.ingredient} >
                                     <IngredientConstructor
                                         ingredient={ingredient}
                                     />
@@ -69,7 +67,7 @@ const BurgerConstructor = React.memo(({ card, total }) => {
 
 
 BurgerConstructor.propTypes = {
-    card: PropTypes.arrayOf(ingredientType).isRequired,
+    ingredients: PropTypes.arrayOf(ingredientType).isRequired,
     total: PropTypes.number,
 }
 

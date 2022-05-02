@@ -30,7 +30,7 @@ function IngredientDetails ({ingredient, onClose}) {
 
 
 IngredientDetails.propTypes = {
-    ingredient: PropTypes.arrayOf(ingredientType).isRequired,
+    ingredient: ingredientType.isRequired,
     onClose: PropTypes.func,
 }
 

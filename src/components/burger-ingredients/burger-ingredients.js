@@ -9,7 +9,7 @@ import {useVisible} from '../../hooks/use-visible';
 
 
 
-const BurgerIngredients = React.memo(({data, isLoading}) => {
+const BurgerIngredients = React.memo(({ingredients, isLoading}) => {
     const [tab, setTab] = React.useState('buns')
     const [showDetails, toggleDetailView] = useVisible()
     const [selectedItem, setSelectedItem] = useState(null)
@@ -37,7 +37,8 @@ const BurgerIngredients = React.memo(({data, isLoading}) => {
 
     const openDetailModal = (e) => {
         let id = e.currentTarget.getAttribute('data-id');
-        setSelectedItem(data.filter(x => x._id === id)[0]);
+        const item = ingredients.filter(x => x._id === id)[0]
+        setSelectedItem(item);
         toggleDetailView();
     }
 
@@ -57,39 +58,36 @@ const BurgerIngredients = React.memo(({data, isLoading}) => {
                     <div id="buns" ref={bunsRef} className={ingredientsStyles.title}>
                         <p className="text text_type_main-medium mt-10">Булки</p>
                     </div>
-                    {data.map( (ingredient, index) => (
+                    {ingredients.map( (ingredient, index) => (
                         ingredient.type==='bun'
                             ?  <Ingredient
                                     key={ingredient._id}
                                     ingredient={ingredient}
                                     openModal={openDetailModal}
-                                    dataId={ingredient._id}
                                 />
                             : ''
                     ))}
                     <div id="sauces" ref={saucesRef} className={ingredientsStyles.title}>
                         <p className="text text_type_main-medium mt-10">Соусы</p>
                     </div>
-                    {data.map( (ingredient, index) => (
+                    {ingredients.map( (ingredient, index) => (
                         ingredient.type==='sauce'
                             ?  <Ingredient
                                     key={ingredient._id}
                                     ingredient={ingredient}
                                     openModal={openDetailModal}
-                                    dataId={ingredient._id}
                                 />
                             : ''
                     ))}
                     <div id="stuffing" ref={mainRef} className={ingredientsStyles.title}>
                         <p className="text text_type_main-medium mt-10">Начинка</p>
                     </div>
-                    {data.map( (ingredient, index) => (
+                    {ingredients.map( (ingredient, index) => (
                         ingredient.type==='main'
                         ?  <Ingredient
                             key={ingredient._id}
                             ingredient={ingredient}
                             openModal={openDetailModal}
-                            dataId={ingredient._id}
                         />
                         : ''
                     ))}
@@ -102,7 +100,7 @@ const BurgerIngredients = React.memo(({data, isLoading}) => {
 
 
 BurgerIngredients.propTypes = {
-    data: PropTypes.arrayOf(ingredientType).isRequired,
+    ingredients: PropTypes.arrayOf(ingredientType).isRequired,
     isLoading: PropTypes.bool
 }
 
