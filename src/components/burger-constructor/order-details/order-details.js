@@ -4,14 +4,17 @@ import { ModalOverlay } from '../../modal-overlay/modal-overlay';
 import acceptedImage from '../../../images/done.png';
 import PropTypes from 'prop-types';
 import React from "react";
+import { OrderNumberContext } from '../../../services/burger-constructor-context';
 
 
-function OrderDetails ({order, onClose }) {
+function OrderDetails ({ onClose }) {
+    const { orderNumber } = React.useContext(OrderNumberContext)
+
     return (
         <>
             <Modal onClose={onClose} >
                 <section className={`${orderStyles.detailSection}`}>
-                    <p className="text text_type_digits-large  mb-8">{order}</p>
+                    <p className="text text_type_digits-large  mb-8">{orderNumber}</p>
                     <p className="text text_type_main-medium mb-10"> идентификатор заказа</p>
                     <div className={orderStyles.accepted}>
                         <img src={acceptedImage} alt='Заказ принят' />
@@ -27,7 +30,6 @@ function OrderDetails ({order, onClose }) {
 
 
 OrderDetails.propTypes = {
-    order: PropTypes.number.isRequired,
     onClose: PropTypes.func,
 }
 

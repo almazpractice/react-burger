@@ -1,68 +1,88 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
-import API_URL from "../../utils/api-burger";
+import { getIngredientsData } from "../../utils/api-burger";
 import { v4 } from 'uuid';
 import _ from "lodash";
+import { BurgerConstructorContext, TotalPriceContext, OrderNumberContext } from '../../services/burger-constructor-context';
+
+
+const totalPriceInitialState = { totalPrice: 0 }
+
+function totalPriceReducer(state, action) {
+    switch (action.type) {
+        case "set":
+            return { totalPrice: action.payload };
+        case "reset":
+            return { totalPrice: totalPriceInitialState };
+        default:
+            throw new Error(`Wrong type of action: ${action.type}`);
+    }
+}
 
 
 const App = React.memo(() => {
-    const [state, setState] = React.useState({
-        data: [],
-        loading: true,
-    })
-    const [total, setTotal] = React.useState(0)
+
+    const [ loading, setLoading ] = React.useState(false)
+    const [ data, setData ] = React.useState([])
     const [page, setPage] = React.useState('constructor')
-    const [card, setCard] = React.useState([])
+    const [burgerConstructorData, setBurgerConstructorData] = React.useState([]);
+    const [orderNumber, setOrderNumber] = React.useState(0);
+    const [totalPriceState, totalPriceDispatcher] = useReducer(totalPriceReducer, totalPriceInitialState, undefined);
+
 
     useEffect(() => {
-        const getData = (url) => {
-            setState({...state, loading: true});
-            fetch(url)
-                .then(res => res.json())
-                .then(res => {
-                    const dataToIngredients = res.data.map(ingredient => {
-                        ingredient.__v++
-                        return ingredient
-                    })
-                    setState({...state, data: dataToIngredients, loading: false})
+        const getData = async () => {
+            setLoading(true);
+            setData([]);
+
+            await getIngredientsData()
+                .then((data) => {
+                    setData(data);
+
+                    // TO-FIX: временный код для заполнения конструктора
+                    if (data.length) {
+                        const repeatCopyIngredient = _.cloneDeep(data[2])
+                        repeatCopyIngredient.uuid = v4()
+                        repeatCopyIngredient.__v++
+                        setBurgerConstructorData([repeatCopyIngredient, ...data.map (ingredient => {
+                            const ingredientCopy = _.cloneDeep(ingredient)
+                            ingredientCopy.__v++
+                            ingredientCopy.uuid = v4()
+                            return ingredientCopy
+                        })])
+                    }
 
                 })
-                .catch(e => console.error(`Ошибка в функции getData! ${e}`))
+                .finally(() => {
+                        setLoading(false);
+                    }
+                ).
+                catch((e) => {
+                    console.error(e);
+                });
         }
 
-        setState({loading: true, data: []})
-        getData(API_URL + '/ingredients')
+        getData();
+    }, [])
 
-    },[])
-
-    useEffect(() => {
-        // временный код, для заполнения корзины и дублирования ингредиентов
-        if (state.data.length) {
-            const repeatCopyIngredient = _.cloneDeep(state.data[2])
-            repeatCopyIngredient.uuid = v4()
-            setCard([repeatCopyIngredient, ...state.data.map (ingredient => {
-                const ingredientCopy = _.cloneDeep(ingredient)
-                ingredientCopy.uuid = v4()
-                return ingredientCopy
-            })])
-        }
-    },[state.data])
-
-
-    useEffect( () => {
-        setTotal(state.data.reduce((acc, cur) => acc + cur.price * cur.__v, 0))
-    }, [state.data])
 
     return(
         <>
             <AppHeader currentPage={page} onChangePage={setPage}/>
             {page === 'constructor' && (
                 <main className='containerForBurgers'>
-                    {state.data !== null && card !== null && (<>
-                        <BurgerIngredients ingredients={state.data} isLoading={state.loading} />
-                        <BurgerConstructor ingredients={card} total={total} />
+                    {data !== null && burgerConstructorData !== null && (<>
+                        <BurgerIngredients ingredients={data} isLoading={loading} />
+                        {/*<BurgerConstructor ingredients={card} total={total} />*/}
+                        <BurgerConstructorContext.Provider value={{ burgerConstructorData }}>
+                            <TotalPriceContext.Provider value={{ totalPriceState, totalPriceDispatcher }}>
+                                <OrderNumberContext.Provider value={{ orderNumber, setOrderNumber }}>
+                                    <BurgerConstructor />
+                                </OrderNumberContext.Provider>
+                            </TotalPriceContext.Provider>
+                        </BurgerConstructorContext.Provider>
                     </>)}
                 </main>
             )}

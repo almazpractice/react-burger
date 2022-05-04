@@ -1,32 +1,65 @@
 import constructorStyles from './burger-constructor.module.css';
 import IngredientConstructor from './igredient-constructor/igredient-constructor';
-import {ingredientType} from '../../utils/data-type';
 import OrderDetails from './order-details/order-details';
-import PropTypes from 'prop-types';
 import React from "react";
 import SumOrder from './sum-order/sum-order';
 import {useVisible} from '../../hooks/use-visible';
+import { BurgerConstructorContext, TotalPriceContext, OrderNumberContext } from '../../services/burger-constructor-context';
+import {getOrderNumber} from "../../utils/api-burger";
 
 
-const BurgerConstructor = React.memo(({ ingredients, total }) => {
+const BurgerConstructor = React.memo(() => {
     const [showOrder, toggleOrderView] = useVisible()
-    const [orderNumber, setOrderNumber] = React.useState(34536);
-    const chosenBun = ingredients.find((ingredient) => (ingredient.type === 'bun' && ingredient.__v > 0))
-
+    const { burgerConstructorData } = React.useContext(BurgerConstructorContext);
+    const { totalPriceDispatcher } = React.useContext(TotalPriceContext);
+    const { setOrderNumber } = React.useContext(OrderNumberContext);
+    const [ loading, setLoading ] = React.useState(false);
 
     const openOrderModal = () => {
-        setOrderNumber(orderNumber+1);
         toggleOrderView()
     }
+
+    const bunIngredient = React.useMemo(
+        () => burgerConstructorData.find(x => (x.type === 'bun' && x.__v > 0)),
+        [burgerConstructorData]
+    );
+
+    const notBunIngredients = React.useMemo(
+        () => burgerConstructorData.filter(x => (x.type !== 'bun' && x.__v > 0)),
+        [burgerConstructorData]
+    );
+
+    const createOrder = async () => {
+        setLoading(true);
+        const ingredientsIdArr = burgerConstructorData.map(item => item._id)
+        await getOrderNumber(ingredientsIdArr)
+            .then(orderNumber => setOrderNumber(orderNumber))
+            .finally(() => setLoading(false))
+            .catch(e => console.log(e))
+            .then(openOrderModal)
+    }
+
+
+    React.useEffect(
+        () => {
+            if (burgerConstructorData.length > 0 && bunIngredient) {
+                totalPriceDispatcher({
+                    type: 'set',
+                    payload: notBunIngredients.reduce((sum, a) => sum + a.price, 0) + bunIngredient.price * 2
+                });
+            }
+        },
+        [burgerConstructorData]
+    );
 
     return (
         <section className={`${constructorStyles.constructorSection} pt-25`}>
             <div className={constructorStyles.list} >
-                {chosenBun
+                {bunIngredient
                     ? (
                         <div className={constructorStyles.ingredient} >
                             <IngredientConstructor
-                                ingredient={chosenBun}
+                                ingredient={bunIngredient}
                                 type={'top'}
                                 text={'(верх)'}
                             />
@@ -34,7 +67,7 @@ const BurgerConstructor = React.memo(({ ingredients, total }) => {
                     : ''
                 }
                 <div className={constructorStyles.saucesMains}>
-                    {ingredients.length > 0 && ingredients.map((ingredient, index) => {
+                    {burgerConstructorData.length > 0 && burgerConstructorData.map((ingredient, index) => {
                         return (
                             (ingredient.__v > 0 && ingredient.type !== 'bun') ? (
                                 <div key={ingredient.uuid} className={constructorStyles.ingredient} >
@@ -46,10 +79,10 @@ const BurgerConstructor = React.memo(({ ingredients, total }) => {
                         )
                     })}
                 </div>
-                {chosenBun
+                {bunIngredient
                     ? (<div className={constructorStyles.ingredient} >
                         <IngredientConstructor
-                            ingredient={chosenBun}
+                            ingredient={bunIngredient}
                             type={'bottom'}
                             text={'(низ)'}
                         />
@@ -58,18 +91,12 @@ const BurgerConstructor = React.memo(({ ingredients, total }) => {
                 }
             </div>
             <div>
-                <SumOrder total={total} openModal={openOrderModal}/>
+                <SumOrder handleCLick={createOrder} loading={loading} />
             </div>
-            {showOrder && <OrderDetails onClose={toggleOrderView} order={orderNumber}/>}
+            {showOrder && <OrderDetails onClose={toggleOrderView} />}
         </section>
     )
 })
 
 
-BurgerConstructor.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientType).isRequired,
-    total: PropTypes.number,
-}
-
-
-export default BurgerConstructor
+export default React.memo(BurgerConstructor)
