@@ -1,0 +1,28 @@
+.constructorSection {
+    width: calc(100%/2 - 20px);
+    margin: 0 auto;
+    margin-bottom: 40px;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+}
+
+.saucesMains {
+    max-height: calc(100vh - 516px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.ingredient {
+    margin: 8px;
+}
+
+.ingredient:last-child {
+    margin-bottom: 0;
+}
+
+.ingredient:first-child {
+    margin-top: 0;
+}

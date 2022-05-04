@@ -1,0 +1,29 @@
+.ingredientsSection {
+    width: calc(100%/2 - 20px);
+    margin: 0 auto;
+    margin-bottom: 40px;
+}
+
+.list {
+    max-height: calc(100vh - 284px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    
+}
+
+.title {
+    width: 100%;
+}
+
+.ingredients {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+@media screen and (max-width: 750px) {
+    .title {
+        font-size: 28px;
+    }
+}
