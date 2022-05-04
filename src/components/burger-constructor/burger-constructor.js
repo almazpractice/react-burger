@@ -37,7 +37,7 @@ const BurgerConstructor = React.memo(({ ingredients, total }) => {
                     {ingredients.length > 0 && ingredients.map((ingredient, index) => {
                         return (
                             (ingredient.__v > 0 && ingredient.type !== 'bun') ? (
-                                <div key={ingredient._id + ingredient.uuid} className={constructorStyles.ingredient} >
+                                <div key={ingredient.uuid} className={constructorStyles.ingredient} >
                                     <IngredientConstructor
                                         ingredient={ingredient}
                                     />
