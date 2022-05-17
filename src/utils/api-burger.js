@@ -28,7 +28,7 @@ export const getIngredientsData = async () => {
 }
 
 
-export const getOrderNumber = async (data) => {
+export const getOrder = async (data) => {
     return await fetch(API_URL + '/orders', {
         method: 'POST',
         headers: {
@@ -42,7 +42,7 @@ export const getOrderNumber = async (data) => {
         .then(checkResponse)
         .then(checkSuccess)
         .then(data => {
-            return data.order.number
+            return data.order
         })
 }
 

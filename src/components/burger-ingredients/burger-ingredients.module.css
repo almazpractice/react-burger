@@ -27,3 +27,30 @@
         font-size: 28px;
     }
 }
+
+.tabsSection {
+    display: flex;
+}
+
+@media screen and (max-width: 886px) {
+    .tabsSection {
+        display: none;
+    }
+}
+
+.errorModalSection {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+    width: calc(100% - 80px);
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.errorModalWrapper {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}

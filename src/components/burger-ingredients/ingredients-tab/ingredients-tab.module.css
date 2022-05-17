@@ -1,9 +1,0 @@
-.tabsSection {
-    display: flex;
-}
-
-@media screen and (max-width: 886px) {
-    .tabsSection {
-        display: none;
-    }
-}

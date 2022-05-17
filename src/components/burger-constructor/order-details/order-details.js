@@ -1,14 +1,14 @@
-import Modal from '../../modal/modal';
 import orderStyles from './order-details.module.css';
-import { ModalOverlay } from '../../modal-overlay/modal-overlay';
 import acceptedImage from '../../../images/done.png';
-import PropTypes from 'prop-types';
 import React from "react";
-import { OrderNumberContext } from '../../../services/burger-constructor-context';
+import {useSelector} from "react-redux";
+import Modal from '../../modal/modal';
+import { ModalOverlay } from '../../modal-overlay/modal-overlay';
+import PropTypes from 'prop-types';
 
 
 function OrderDetails ({ onClose }) {
-    const { orderNumber } = React.useContext(OrderNumberContext)
+    const orderNumber = useSelector(state => state.order.order.number)
 
     return (
         <>
@@ -23,7 +23,6 @@ function OrderDetails ({ onClose }) {
                     <p className="text text_type_main-default text_color_inactive mb-5"> Дождитесь готовности на орбитальной станции </p>
                 </section>
             </Modal>
-            <ModalOverlay onClose={onClose}/>
         </>
     )
 }
