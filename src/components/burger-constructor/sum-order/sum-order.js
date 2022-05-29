@@ -1,26 +1,30 @@
-import { Button, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import sumOrderStyles from './sum-order.module.css';
-import PropTypes from 'prop-types';
+import React from "react";
+import {useSelector} from "react-redux";
+import { Button, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import PropTypes from "prop-types";
+
+const SumOrder = ({handleModal}) => {
+    const data = useSelector(state => state.ingredients.cart)
+    const loading = useSelector(state => state.order.loading)
+    const totalPrice = useSelector(state => state.ingredients.totalPrice)
 
 
-
-const SumOrder = ({ total, openModal }) => {
     return (
         <section className={` mt-10 ${sumOrderStyles.sectionOrder}`}>
-            <div className={` ${sumOrderStyles.CurrencyIcon} mr-10`}>
-                <span className="text text_type_digits-medium mr-2"> {total} </span>
+            <div className={` ${sumOrderStyles.currencyIcon} mr-10`}>
+                <span className="text text_type_digits-medium mr-2"> {totalPrice} </span>
                 <CurrencyIcon type="primary"/>
             </div>
-            <Button type="primary" size="large" onClick={openModal}>Оформить заказ</Button>
+             <Button type="primary" size="large" onClick={handleModal} disabled={!(data && data.filter(x => x.type === 'bun').length && !loading && data.filter(x => x.type !== 'bun').length)}>
+                 Оформить заказ
+             </Button>
         </section>
     )
 }
 
-
 SumOrder.propTypes = {
-    total: PropTypes.number.isRequired,
-    openModal: PropTypes.func
+    handleModal: PropTypes.func,
 }
-
 
 export default SumOrder

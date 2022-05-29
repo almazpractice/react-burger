@@ -2,21 +2,23 @@
     width: calc(100%/2 - 20px);
     margin: 0 auto;
     margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 
 .list {
     display: flex;
     flex-direction: column;
+    flex: 1 0 auto;
 }
 
 .saucesMains {
     max-height: calc(100vh - 516px);
     overflow-y: scroll;
     overflow-x: hidden;
-}
-
-.ingredient {
-    margin: 8px;
+    flex: 1 0 auto;
+    transition: all 0.5s ease;
 }
 
 .ingredient:last-child {
@@ -25,4 +27,19 @@
 
 .ingredient:first-child {
     margin-top: 0;
+}
+
+.isHover {
+}
+
+.isHover::after {
+    content: '';
+    position: absolute;
+    width: calc(100% - 70px);
+    height: calc(100% - 240px);
+    background-color: rgba(122, 122, 122, 0.1);
+    left: 30px;
+    top: 120px;
+    z-index: -1;
+    border-radius: 60px;
 }
