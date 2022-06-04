@@ -1,7 +1,6 @@
 import detailsStyles from './ingredient-details.module.css';
 import {useSelector} from "react-redux";
 import Modal from '../../modal/modal';
-import { ModalOverlay } from '../../modal-overlay/modal-overlay';
 import PropertiesText from './properties-text/properties-text';
 import PropTypes from 'prop-types';
 

@@ -3,7 +3,6 @@ import acceptedImage from '../../../images/done.png';
 import React from "react";
 import {useSelector} from "react-redux";
 import Modal from '../../modal/modal';
-import { ModalOverlay } from '../../modal-overlay/modal-overlay';
 import PropTypes from 'prop-types';
 
 

@@ -16,8 +16,12 @@ const SumOrder = ({handleModal}) => {
                 <span className="text text_type_digits-medium mr-2"> {totalPrice} </span>
                 <CurrencyIcon type="primary"/>
             </div>
-             <Button type="primary" size="large" onClick={handleModal} disabled={!(data && data.filter(x => x.type === 'bun').length && !loading && data.filter(x => x.type !== 'bun').length)}>
-                 Оформить заказ
+             <Button
+                 type="primary"
+                 size="large"
+                 onClick={handleModal}
+                 disabled={!(data && data.filter(x => x.type === 'bun').length && !loading && data.filter(x => x.type !== 'bun').length)}>
+                 { loading ? "Загрузка..." : "Оформить заказ"}
              </Button>
         </section>
     )

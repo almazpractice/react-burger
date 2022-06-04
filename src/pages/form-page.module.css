@@ -1,0 +1,15 @@
+.wrapper {
+    display: flex;
+    padding: 0 20px;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 128px);
+}
+
+.section {
+    max-height: calc(100vh - 128px);
+    max-width: 480px;
+    margin: 0 auto;
+    align-items: stretch;
+    justify-content: center;
+}
