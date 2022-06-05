@@ -1,10 +1,10 @@
-import  styles from './auth.module.css'
-import {useDispatch, useSelector} from "react-redux";
-import {fetchChangeProfileInfo, fetchLogout} from "../services/thunks/user";
-import AppHeader from "../components/app-header/app-header";
-import {Input, Button} from "@ya.praktikum/react-developer-burger-ui-components";
 import React, {useState} from "react";
 import { Link, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
+import  styles from './auth.module.css'
+import { fetchChangeProfileInfo, fetchLogout } from "../services/thunks";
+import AppHeader from "../components/app-header/app-header";
 
 
 export const ProfilePage = () => {

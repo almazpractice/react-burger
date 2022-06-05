@@ -1,6 +1,6 @@
 import sumOrderStyles from './sum-order.module.css';
 import React from "react";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import { Button, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
 

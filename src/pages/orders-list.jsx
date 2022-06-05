@@ -1,4 +1,4 @@
-import {FormPage} from "./form-page";
+import { FormPage } from "./form-page";
 
 export const OrdersList = () => {
 

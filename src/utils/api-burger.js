@@ -1,3 +1,4 @@
+import {getRefreshToken, saveTokens} from "./token";
 
 export const API_URL = 'https://norma.nomoreparties.space/api'
 
@@ -19,6 +20,48 @@ const checkSuccess = (data) => {
     }
 }
 
+export const tokenUser = async () => {
+    return await fetch(API_URL + "/auth/token", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "token": localStorage.getItem('refreshToken'),
+        })
+    })
+        .then(checkResponse)
+        .then(checkSuccess)
+        .then((data) => {
+            return data;
+        })
+}
+
+const fetchWithRefresh = async (url, params) => {
+    try {
+        const response = await fetch(url, params);
+        return await checkResponse(response);
+    }
+    catch (err) {
+        if (err.message === 'jwt malformed' || err.message === 'jwt expired') {
+                const refreshData = await tokenUser();
+                if (!refreshData.success) {
+                    Promise.reject(refreshData);
+                }
+                else {
+                    saveTokens(refreshData.accessToken, refreshData.refreshToken);
+                    params.headers.authorization = refreshData.accessToken;
+                    const response = await fetch(url, params);
+                    return await checkResponse(response);
+                }
+        }
+        else {
+            return Promise.reject(err);
+        }
+    }
+}
+
 export const getIngredientsData = async () => {
     return await fetch(API_URL + "/ingredients")
         .then(checkResponse)
@@ -29,12 +72,13 @@ export const getIngredientsData = async () => {
 }
 
 
-export const getOrder = async (data) => {
-    return await fetch(API_URL + '/orders', {
+export const getOrder = async (authToken, data) => {
+    return await fetchWithRefresh(API_URL + '/orders', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'authorization': 'Bearer ' + authToken
         },
         body: JSON.stringify({
             "ingredients": data
@@ -143,7 +187,7 @@ export const resetPasswordRequest = async (password, refreshCode) => {
 }
 
 export const changeProfileRequest = async (authToken, email, name, password) => {
-    return await fetch(API_URL + "/auth/user ", {
+    return await fetchWithRefresh(API_URL + "/auth/user ", {
         method: 'PATCH',
         headers: {
             'Accept': 'application/json',
@@ -164,7 +208,7 @@ export const changeProfileRequest = async (authToken, email, name, password) => 
 }
 
 export const getProfileInfoRequest = async (authToken) => {
-    return await fetch(API_URL + '/auth/user', {
+    return await fetchWithRefresh(API_URL + '/auth/user', {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -177,20 +221,3 @@ export const getProfileInfoRequest = async (authToken) => {
         .then(data => data)
 }
 
-export const tokenUser = async (refreshToken) => {
-    return await fetch(API_URL + "/auth/token", {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            "token": refreshToken,
-        })
-    })
-        .then(checkResponse)
-        .then(checkSuccess)
-        .then((data) => {
-            return data;
-        })
-}

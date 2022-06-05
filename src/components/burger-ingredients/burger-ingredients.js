@@ -2,11 +2,11 @@ import ingredientsStyles from './burger-ingredients.module.css';
 import React, { useEffect, useState } from 'react';
 import Ingredient from './ingredient/ingredient';
 import IngredientDetails from "./ingredient-details/ingredient-details";
-import {useVisible} from '../../hooks/use-visible';
-import {useDispatch, useSelector} from "react-redux";
-import {fetchIngredients} from "../../services/thunks";
-import {setSelectedIngredient} from "../../services/slices";
-import {Tab} from "@ya.praktikum/react-developer-burger-ui-components";
+import { useVisible } from '../../hooks/use-visible';
+import { useDispatch, useSelector } from "react-redux";
+import { fetchIngredients } from "../../services/thunks";
+import { setSelectedIngredient } from "../../services/slices";
+import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
 
 

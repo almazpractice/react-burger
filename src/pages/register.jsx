@@ -1,11 +1,11 @@
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { Button, Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './auth.module.css';
-import {Link} from "react-router-dom";
-import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
-import {PasswordInput} from "../components/password-input/password-input";
-import {FormPage} from "./form-page";
-import {useDispatch, useSelector} from "react-redux";
-import {fetchRegister} from "../services/thunks/user";
-import {useState} from "react";
+import { fetchRegister } from "../services/thunks";
+import { FormPage } from "./form-page";
+import { PasswordInput } from "../components/password-input/password-input";
 
 export function RegisterPage() {
     const dispatch = useDispatch()

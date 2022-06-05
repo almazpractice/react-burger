@@ -1,14 +1,14 @@
 import styles from './burger-constructor.module.css';
-import React, {useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import OrderDetails from './order-details/order-details';
 import SumOrder from './sum-order/sum-order';
 import NotBunElements from './not-bun-elements/not-bun-elements';
 import BunElement from "./bun-elements/bun-elements";
-import {useVisible} from '../../hooks/use-visible';
-import {fetchCreateOrder} from "../../services/thunks";
-import {addIngredient, increaseIngredient, setTotalPrice} from "../../services/slices";
-import {useDrop} from "react-dnd";
+import { useVisible } from '../../hooks/use-visible';
+import { fetchCreateOrder } from "../../services/thunks";
+import { addIngredient, increaseIngredient, setTotalPrice } from "../../services/slices";
+import { useDrop } from "react-dnd";
 
 
 const BurgerConstructor = React.memo(() => {

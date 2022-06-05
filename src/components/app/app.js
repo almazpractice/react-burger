@@ -1,16 +1,17 @@
-import React, {useEffect} from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import {ConstructorPage, LoginPage, RegisterPage, ResetPasswordPage, ForgotPasswordPage, NotFound404 } from '../../pages'
-import {ProfilePage} from "../../pages/profile";
-import {OrdersList} from "../../pages/orders-list";
-import {useDispatch, useSelector} from "react-redux";
-import {getRefreshToken} from "../../utils/token";
-import {fetchTokenUser} from "../../services/thunks/token";
-import {fetchGetProfileInfo} from "../../services/thunks/user";
+import React, { useEffect } from 'react';
+import { Switch, Route, useHistory, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import {
+    ConstructorPage, LoginPage, RegisterPage, ResetPasswordPage, ForgotPasswordPage, NotFound404, ProfilePage, OrdersList
+} from '../../pages'
+import { getRefreshToken } from "../../utils/token";
+import { fetchTokenUser, fetchGetProfileInfo } from "../../services/thunks";
 
 
 const App = () => {
     const dispatch = useDispatch();
+    const history = useHistory();
+    const location = useLocation();
     const { loading, user, isAuthenticated } = useSelector(state => state.user)
 
     useEffect(() => {
@@ -28,34 +29,32 @@ const App = () => {
 
     return(
         <>
-        <Router>
             <Switch>
-                <Route path="/" exact={true}>
-                    <ConstructorPage />
+                <Route path="/" exact={true} component={ConstructorPage}>
+                    {/*<ConstructorPage />*/}
                 </Route>
-                <Route path="/login" exact={true}>
-                    <LoginPage />
+                <Route path="/login" exact={true} component={LoginPage}>
+                    {/*<LoginPage />*/}
                 </Route>
-                <Route path="/register" exact={true}>
-                    <RegisterPage />
+                <Route path="/register" exact={true} component={RegisterPage}>
+                    {/*<RegisterPage />*/}
                 </Route>
-                <Route path="/forgot-password" exact={true}>
-                    <ForgotPasswordPage />
+                <Route path="/forgot-password" exact={true} component={ForgotPasswordPage}>
+                    {/*<ForgotPasswordPage />*/}
                 </Route>
-                <Route path="/reset-password">
-                    <ResetPasswordPage />
+                <Route path="/reset-password" component={ResetPasswordPage}>
+                    {/*<ResetPasswordPage />*/}
                 </Route>
-                <Route path="/profile">
-                    <ProfilePage />
+                <Route path="/profile" component={ProfilePage}>
+                    {/*<ProfilePage />*/}
                 </Route>
-                <Route path="/orders">
-                    <OrdersList />
+                <Route path="/orders" component={OrdersList}>
+                    {/*<OrdersList />*/}
                 </Route>
-                <Route>
-                    <NotFound404 />
+                <Route path="*" component={NotFound404}>
+                    {/*<NotFound404 />*/}
                 </Route>
             </Switch>
-        </Router>
         </>
     );
 }

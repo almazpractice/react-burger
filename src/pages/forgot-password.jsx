@@ -1,10 +1,10 @@
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { Button, Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './auth.module.css'
-import {FormPage} from "./form-page";
-import {Link} from "react-router-dom";
-import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
-import {useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {fetchForgotPasswordUser} from "../services/thunks/user";
+import { FormPage } from "./form-page";
+import { fetchForgotPasswordUser } from "../services/thunks";
 
 export function ForgotPasswordPage() {
     const dispatch = useDispatch()

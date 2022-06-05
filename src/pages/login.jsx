@@ -1,11 +1,11 @@
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { Button, Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './auth.module.css'
-import {FormPage} from "./form-page";
-import {Link} from "react-router-dom";
-import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
-import {PasswordInput} from "../components/password-input/password-input";
-import {useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {fetchLogin} from "../services/thunks/user";
+import { FormPage } from "./form-page";
+import { PasswordInput } from "../components/password-input/password-input";
+import { fetchLogin } from "../services/thunks";
 
 export function LoginPage() {
     const [form, setValue] = useState({ email: '', password: '' });

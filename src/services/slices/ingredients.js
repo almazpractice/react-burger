@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import _ from 'lodash';
-import {v4} from "uuid";
+import { v4 } from "uuid";
 
 const ingredientsInitialState = {
     loading: false,

@@ -1,23 +1,12 @@
 import {
-    changeProfileInfo,
-    getProfileInfo,
-    forgotPassword,
-    resetPassword,
-    userError,
-    userLoading,
-    userLogin,
-    userLogout,
+    changeProfileInfo, getProfileInfo, forgotPassword, resetPassword,
+    userError, userLoading, userLogin, userLogout,
 } from "../slices";
 import {
-    changeProfileRequest,
-    getProfileInfoRequest,
-    forgotPasswordRequest,
-    loginRequest,
-    logoutRequest,
-    registerRequest,
-    resetPasswordRequest
+    changeProfileRequest, getProfileInfoRequest, forgotPasswordRequest, loginRequest,
+    logoutRequest, registerRequest, resetPasswordRequest
 } from "../../utils/api-burger";
-import {clearTokens, getAuthToken, getRefreshToken, saveTokens} from "../../utils/token";
+import { clearTokens, getAuthToken, getRefreshToken, saveTokens } from "../../utils/token";
 
 export const fetchRegister = (name, email, password) => async (dispatch) => {
     dispatch(userLoading());
