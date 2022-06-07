@@ -1,12 +1,12 @@
-import { FormPage } from "./form-page";
+import { WrapperPage } from "./wrapper-page";
 
 export const OrdersList = () => {
 
     return (
-        <FormPage>
+        <WrapperPage>
             <span className="text text_type_main-medium">
                 Page in development
             </span>
-        </FormPage>
+        </WrapperPage>
     )
 }

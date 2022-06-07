@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { Button, Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './auth.module.css'
-import { FormPage } from "./form-page";
+import { WrapperPage } from "./wrapper-page";
 import { PasswordInput } from "../components/password-input/password-input";
 import { fetchLogin } from "../services/thunks";
 
@@ -21,9 +21,8 @@ export function LoginPage() {
         dispatch(fetchLogin(form.email, form.password));
     }
 
-
     return (
-        <FormPage>
+        <WrapperPage>
             <form className={styles.form} onSubmit={login}>
                 <h1 className="text text_type_main-medium mb-6">Вход</h1>
                 <div className="mb-6"><Input placeholder="E-mail" value={form.email} name="email" onChange={onChange} /></div>
@@ -40,10 +39,10 @@ export function LoginPage() {
                     {loading ? "Загрузка..." : "Войти"}
                 </Button>
                 </div>
-                { error && <label className={` ${styles.label_success} text text_type_main-small red`}>{error}</label> }
+                { error==="Error: GET-запрос вернул status: 401" && <label className={` ${styles.label_success} text text_type_main-small red`}>Неверные данные для входа!</label> }
             </form>
             <span className={`${styles.span} text text_type_main-default text_color_inactive`}>Вы — новый пользователь? <Link to="/register"> Зарегистрироваться </Link></span>
             <span className={`${styles.span} text text_type_main-default text_color_inactive`}>Забыли пароль? <Link to="/forgot-password"> Восстановить пароль </Link></span>
-        </FormPage>
+        </WrapperPage>
     );
 }

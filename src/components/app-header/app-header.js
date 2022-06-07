@@ -2,10 +2,12 @@ import styles from './app-header.module.css';
 import { BurgerIcon, ListIcon, ProfileIcon, Logo } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { memo } from 'react';
 import { Link, useLocation } from "react-router-dom";
+import {useSelector} from "react-redux";
 
 
 const AppHeader = () => {
     const pathname = useLocation().pathname;
+    const { isAuthenticated, user } = useSelector(state => state.user)
 
     return (
         <header className={styles.header} >
@@ -30,10 +32,10 @@ const AppHeader = () => {
                     </Link>
                 </div>
                 <div className={styles.menu_item}>
-                    <Link className={`${styles.menu_item_link} p-4 mt-4 mb-4`} to="/profile">
-                        <ProfileIcon type={pathname === '/profile' ? 'primary' : 'secondary'} />
-                        <span className={`${pathname !== '/profile' && "text_color_inactive"} text text_type_main-default ml-2`}>
-                          Личный кабинет
+                    <Link className={`${styles.menu_item_link} p-4 mt-4 mb-4`} to="/profile/">
+                        <ProfileIcon type={pathname.includes('profile') ? 'primary' : 'secondary'} />
+                        <span className={`${!pathname.includes('profile') && "text_color_inactive"} text text_type_main-default ml-2`}>
+                          { isAuthenticated ? user.name : "Личный кабинет" }
                         </span>
                     </Link>
                 </div>

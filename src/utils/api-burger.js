@@ -84,7 +84,6 @@ export const getOrder = async (authToken, data) => {
             "ingredients": data
         })
     })
-        .then(checkResponse)
         .then(checkSuccess)
         .then(data => {
             return data.order
@@ -181,7 +180,6 @@ export const resetPasswordRequest = async (password, refreshCode) => {
         .then(checkResponse)
         .then(checkSuccess)
         .then((data) => {
-            console.log(data)
             return data;
         })
 }
@@ -200,7 +198,6 @@ export const changeProfileRequest = async (authToken, email, name, password) => 
             "password": password
         })
     })
-        .then(checkResponse)
         .then(checkSuccess)
         .then((data) => {
             return data;
@@ -216,7 +213,6 @@ export const getProfileInfoRequest = async (authToken) => {
             'authorization': 'Bearer ' + authToken
         }
     })
-        .then(checkResponse)
         .then(checkSuccess)
         .then(data => data)
 }

@@ -1,6 +1,6 @@
 import {
     changeProfileInfo, getProfileInfo, forgotPassword, resetPassword,
-    userError, userLoading, userLogin, userLogout,
+    userError, userLoading, userLogin, userLogout, checkAuth, authIsChecked,
 } from "../slices";
 import {
     changeProfileRequest, getProfileInfoRequest, forgotPasswordRequest, loginRequest,
@@ -71,7 +71,7 @@ export const fetchResetPasswordUser = (password, code) => async (dispatch) => {
         });
 }
 
-export const fetchChangeProfileInfo = (name, email, password) => async (dispatch) => {
+export const fetchChangeProfileInfo = (email, name, password) => async (dispatch) => {
     dispatch(userLoading());
     await changeProfileRequest(getAuthToken(), email, name, password)
         .then((data) => {
@@ -93,4 +93,8 @@ export const fetchGetProfileInfo = () => async  (dispatch) => {
             console.log(ex);
             dispatch(userError(ex.message))
         })
+        .finally(() => {
+            dispatch(authIsChecked());
+        })
+
 }

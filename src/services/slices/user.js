@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const userInitialState = {
     loading: false,
+    isAuthChecked: false,
     isAuthenticated: false,
     user: {},
     error: '',
@@ -33,9 +34,10 @@ const userSlice = createSlice({
         },
         userError: (state, action) => {
             state.loading = false;
-            state.loggedIn = false;
+            state.isAuthenticated = false;
             state.user = {};
             state.error = action.payload;
+            state.canChangePassword = false;
         },
         forgotPassword: (state) => {
             state.loading = false;
@@ -57,7 +59,9 @@ const userSlice = createSlice({
             state.loading = false;
             state.user = action.payload;
             state.error = '';
-        }
+        },
+        authIsChecked: (state) => void ( state.isAuthChecked = true ),
+        authIsNotChecked: (state) => void ( state.isAuthChecked = false )
     }
 })
 
@@ -70,6 +74,7 @@ export const {
     forgotPassword,
     resetPassword,
     changeProfileInfo,
-    getProfileInfo
+    getProfileInfo,
+    authIsChecked
 } = userSlice.actions;
 export const usersReducer = userSlice.reducer;

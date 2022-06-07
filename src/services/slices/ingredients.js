@@ -88,7 +88,8 @@ const ingredientsSlice = createSlice({
                 notBuns.splice(current, 2, notBuns[target], notBuns[current])
             }
             state.cart = [...buns, ...notBuns];
-        }
+        },
+        clearCart: (state) => void (state.cart = [])
     }
 })
 
@@ -104,5 +105,6 @@ export const {
     setSelectedIngredient,
     setTotalPrice,
     moveIngredient,
+    clearCart
 } = ingredientsSlice.actions;
 export const ingredientsReducer = ingredientsSlice.reducer;
