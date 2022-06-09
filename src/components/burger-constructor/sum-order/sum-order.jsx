@@ -3,13 +3,17 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Button, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
+import { Link, useLocation } from "react-router-dom";
 
-const SumOrder = ({handleModal}) => {
+const SumOrder = ({ handleModal }) => {
     const data = useSelector(state => state.ingredients.cart)
     const loading = useSelector(state => state.order.loading)
     const totalPrice = useSelector(state => state.ingredients.totalPrice)
     const isAuthenticated = useSelector(state => state.user.isAuthenticated)
+    const location = useLocation();
 
+    const disabled = !(data && data.filter(x => x.type === 'bun').length
+                    && !loading && data.filter(x => x.type !== 'bun').length)
 
     return (
         <>
@@ -18,17 +22,18 @@ const SumOrder = ({handleModal}) => {
                     <span className="text text_type_digits-medium mr-2"> {totalPrice} </span>
                     <CurrencyIcon type="primary"/>
                 </div>
-                <Button
-                    type="primary"
-                    size="large"
-                    onClick={handleModal}
-                    disabled={
-                        !(data && data.filter(x => x.type === 'bun').length
-                            && !loading && data.filter(x => x.type !== 'bun').length)
-                            || !isAuthenticated
-                    }>
-                    { loading ? "Загрузка..." : "Оформить заказ"}
-                </Button>
+                <Link to={ isAuthenticated ? "" : {
+                    pathname: "/login",
+                    state: { from: location }
+                }}>
+                    <Button
+                        type="primary"
+                        size="large"
+                        onClick={isAuthenticated ? handleModal : void 0}
+                        disabled={disabled}>
+                        {loading ? "Загрузка..." : "Оформить заказ"}
+                    </Button>
+                </Link>
             </section>
                 <div className={styles.authLabel}>
                     {!isAuthenticated &&

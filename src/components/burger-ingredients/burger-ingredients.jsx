@@ -1,32 +1,38 @@
 import ingredientsStyles from './burger-ingredients.module.css';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Ingredient from './ingredient/ingredient';
-import { useDispatch, useSelector } from "react-redux";
-import { fetchIngredients } from "../../services/thunks";
+import { useSelector } from "react-redux";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
 
 const BurgerIngredients = React.memo(() => {
     const [tab, setTab] = useState('buns');
-    const dispatch = useDispatch();
-    const loading = useSelector(state => state.ingredients.loading);
-    const error = useSelector(state => state.ingredients.error);
-    const ingredients = useSelector(state => state.ingredients.ingredients);
+    const { ingredients, loading, error } = useSelector(state => state.ingredients)
     const bunsRef = React.useRef(null)
     const saucesRef = React.useRef(null)
     const stuffingRef = React.useRef(null)
-
-    useEffect(() => {
-        if (!loading && ingredients.length === 0) {
-            dispatch(fetchIngredients());
-        }
-    }, [])
 
     const handleScroll = (e) => {
         const y = e.currentTarget.getBoundingClientRect().y + 100;
         const stuffingsY = stuffingRef.current.getBoundingClientRect().y;
         const sauceY = saucesRef.current.getBoundingClientRect().y;
         stuffingsY < y ? setTab('stuffing') : sauceY < y ? setTab('sauces') : setTab('buns');
+    }
+
+    if (!loading && ingredients.length === 0) {
+        return (
+            <section className={ingredientsStyles.ingredientsSection} >
+                <p className="text text_type_main-medium mt-10">Загрузка данных...</p>
+            </section>
+        )
+    }
+
+    if (error) {
+        return (
+            <section className={ingredientsStyles.ingredientsSection} >
+                <p className="text text_type_main-medium mt-10">Ошибка загрузки данных. Проверьте подключение к сети и перезагрузите сайт.</p>
+            </section>
+        )
     }
 
     return(
@@ -47,11 +53,7 @@ const BurgerIngredients = React.memo(() => {
                     Начинка
                 </Tab>
             </div>
-            { error
-            ?  <p className="text text_type_main-medium mt-10">Ошибка загрузки данных. Проверьте подключение к сети.</p>
-            : loading
-            ? <p className="text text_type_main-medium mt-10">Загрузка данных...</p> 
-            : (<div className={ingredientsStyles.list}  onScroll={handleScroll}>
+            <div className={ingredientsStyles.list}  onScroll={handleScroll}>
                 <div id="buns" ref={bunsRef} className={ingredientsStyles.title}>
                     <p className="text text_type_main-medium mt-10">Булки</p>
                 </div>
@@ -70,7 +72,7 @@ const BurgerIngredients = React.memo(() => {
                 {ingredients.map( (ingredient, index) => (
                     ingredient.type==='main' ?  <Ingredient key={ingredient._id} ingredient={ingredient} /> : ''
                 ))}
-            </div>)}
+            </div>
         </section>
         
     )

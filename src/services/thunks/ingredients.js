@@ -2,7 +2,7 @@ import {
     getIngredientsLoading, getIngredientsSuccess, getIngredientsError,
     orderLoading, orderReceived, orderError
 } from '../slices';
-import { getIngredientsData, getOrder } from "../../utils/api-burger";
+import { getIngredientsData, getOrder, refreshTokens } from "../../utils/api-burger";
 import { getAuthToken } from "../../utils/token";
 
 export const fetchIngredients = () => async (dispatch) => {
@@ -19,6 +19,7 @@ export const fetchIngredients = () => async (dispatch) => {
 
 export const fetchCreateOrder = (ingredients) => async (dispatch) => {
     dispatch(orderLoading());
+    await refreshTokens()
     await getOrder(getAuthToken(), ingredients)
         .then((data) => {
             dispatch(orderReceived(data));

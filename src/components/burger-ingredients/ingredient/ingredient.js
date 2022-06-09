@@ -1,10 +1,9 @@
 import ingredientStyles from './ingredient.module.css';
 import React from 'react';
-import PropTypes from "prop-types";
-import {ingredientType} from "../../../utils/data-type";
+import { ingredientType } from "../../../utils/data-type";
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import {useDrag} from "react-dnd";
-import {Link, useLocation} from "react-router-dom";
+import { useDrag } from "react-dnd";
+import { Link, useLocation } from "react-router-dom";
 
 
 const Ingredient = React.memo(({ ingredient }) => {

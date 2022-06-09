@@ -2,6 +2,14 @@ import {getRefreshToken, saveTokens} from "./token";
 
 export const API_URL = 'https://norma.nomoreparties.space/api'
 
+export const refreshTokens = async () => {
+    const refreshData = await tokenUser();
+    if (!refreshData.success) {
+        return console.error('error', refreshData);
+    }
+    return await saveTokens(refreshData.accessToken, refreshData.refreshToken);
+}
+
 const checkResponse = (res) => {
     if (!res.ok) {
         throw new Error("Error: GET-запрос вернул status: " + res.status);
@@ -45,16 +53,20 @@ const fetchWithRefresh = async (url, params) => {
     }
     catch (err) {
         if (err.message === 'jwt malformed' || err.message === 'jwt expired') {
-                const refreshData = await tokenUser();
-                if (!refreshData.success) {
-                    Promise.reject(refreshData);
-                }
-                else {
-                    saveTokens(refreshData.accessToken, refreshData.refreshToken);
-                    params.headers.authorization = refreshData.accessToken;
-                    const response = await fetch(url, params);
-                    return await checkResponse(response);
-                }
+            const refreshToken = getRefreshToken();
+            if (!refreshToken) {
+                return Promise.reject("Can`t find Refresh token in localstorage")
+            }
+            const refreshData = await tokenUser();
+            if (!refreshData.success) {
+                Promise.reject(refreshData);
+            }
+            else {
+                saveTokens(refreshData.accessToken, refreshData.refreshToken);
+                params.headers.authorization = refreshData.accessToken;
+                const response = await fetch(url, params);
+                return await checkResponse(response);
+            }
         }
         else {
             return Promise.reject(err);
@@ -216,4 +228,8 @@ export const getProfileInfoRequest = async (authToken) => {
         .then(checkSuccess)
         .then(data => data)
 }
+
+
+
+
 

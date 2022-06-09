@@ -13,11 +13,11 @@ import { Preloader } from "../preloader/preloader";
 
 
 const BurgerConstructor = React.memo(() => {
-    const dispatch = useDispatch()
-    const burgerConstructorData = useSelector(state => state.ingredients.cart)
-    const [showOrder, toggleOrderView] = useVisible()
-    const error = useSelector(state => state.ingredients.error)
-    const { loading } = useSelector(state => state.order)
+    const dispatch = useDispatch();
+    const burgerConstructorData = useSelector(state => state.ingredients.cart);
+    const [showOrder, toggleOrderView] = useVisible();
+    const error = useSelector(state => state.ingredients.error);
+    const { loading } = useSelector(state => state.order);
 
     const addItem = (item) => {
         dispatch(addIngredient(item))
@@ -34,7 +34,7 @@ const BurgerConstructor = React.memo(() => {
         })
     });
 
-    const openOrderModal = async () => {
+    const openOrderModal = () => {
         dispatch(fetchCreateOrder(burgerConstructorData.map(item => item._id)))
             .then(() => toggleOrderView())
             .then(() => dispatch(clearCart()))

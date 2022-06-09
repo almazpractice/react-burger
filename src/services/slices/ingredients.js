@@ -89,7 +89,13 @@ const ingredientsSlice = createSlice({
             }
             state.cart = [...buns, ...notBuns];
         },
-        clearCart: (state) => void (state.cart = [])
+        clearCart: (state) => {
+            state.cart = []
+            state.ingredients.map(item => {
+                item.__v = 0;
+                return item
+            })
+        }
     }
 })
 

@@ -2,7 +2,7 @@ import { saveTokens, clearTokens } from '../../utils/token';
 import { userLoginByToken, tokenLoading, tokenSuccess, tokenError } from '../slices';
 import { tokenUser } from "../../utils/api-burger";
 
-export const fetchTokenUser = (refreshToken) => async (dispatch) => {
+export const fetchTokenUser = () => async (dispatch) => {
   dispatch(tokenLoading());
   await tokenUser()
     .then((data) => {

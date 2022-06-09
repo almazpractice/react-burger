@@ -18,20 +18,23 @@ const App = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const location = useLocation();
+    const loadingIngredients = useSelector(state => state.ingredients.loading)
+    const ingredients = useSelector(state => state.ingredients.ingredients)
 
     const { loading, user, isAuthenticated, canChangePassword } = useSelector(state => state.user)
 
     const background = location.state && location.state.background
 
-
-
     useEffect(() => {
-        dispatch(fetchIngredients());
+        if (!loadingIngredients && ingredients.length === 0) {
+            dispatch(fetchIngredients());
+        }
         const refreshToken = getRefreshToken();
         if (refreshToken) {
             dispatch(fetchTokenUser(refreshToken));
         }
     }, [dispatch])
+
 
     useEffect(() => {
         if (isAuthenticated && user.name === void 0) {
@@ -43,8 +46,11 @@ const App = () => {
 
     const closeDetailModal = () => {
         dispatch(setSelectedIngredient({}))
-        // toggleDetailView();
         history.goBack()
+    }
+
+    if (user.name === void 0) {
+
     }
 
     if ( loading ) {

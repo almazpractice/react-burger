@@ -1,12 +1,13 @@
 import {
     changeProfileInfo, getProfileInfo, forgotPassword, resetPassword,
-    userError, userLoading, userLogin, userLogout, checkAuth, authIsChecked,
+    userError, userLoading, userLogin, userLogout, authIsChecked,
 } from "../slices";
 import {
     changeProfileRequest, getProfileInfoRequest, forgotPasswordRequest, loginRequest,
-    logoutRequest, registerRequest, resetPasswordRequest
+    logoutRequest, registerRequest, resetPasswordRequest, refreshTokens
 } from "../../utils/api-burger";
 import { clearTokens, getAuthToken, getRefreshToken, saveTokens } from "../../utils/token";
+import { fetchTokenUser } from "./token";
 
 export const fetchRegister = (name, email, password) => async (dispatch) => {
     dispatch(userLoading());
@@ -73,6 +74,7 @@ export const fetchResetPasswordUser = (password, code) => async (dispatch) => {
 
 export const fetchChangeProfileInfo = (email, name, password) => async (dispatch) => {
     dispatch(userLoading());
+    await refreshTokens()
     await changeProfileRequest(getAuthToken(), email, name, password)
         .then((data) => {
             dispatch(changeProfileInfo(data.user));
@@ -91,7 +93,11 @@ export const fetchGetProfileInfo = () => async  (dispatch) => {
         })
         .catch(ex => {
             console.log(ex);
+            console.log("Refreshing token...")
+            dispatch(fetchTokenUser()).then(() => this)
+
             dispatch(userError(ex.message))
+
         })
         .finally(() => {
             dispatch(authIsChecked());

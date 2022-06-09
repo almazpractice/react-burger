@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Link, Route, Switch, useLocation} from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -100,9 +100,9 @@ export const ProfilePage = () => {
     const dispatch = useDispatch();
     const pathname = useLocation().pathname;
 
-    const logout = (e) => {
+    const logout = useCallback((e) => {
         dispatch(fetchLogout());
-    };
+    }, [dispatch]);
 
     return (
         <>
