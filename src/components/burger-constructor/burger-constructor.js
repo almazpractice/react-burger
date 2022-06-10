@@ -1,21 +1,23 @@
 import styles from './burger-constructor.module.css';
-import React, {useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import OrderDetails from './order-details/order-details';
 import SumOrder from './sum-order/sum-order';
 import NotBunElements from './not-bun-elements/not-bun-elements';
 import BunElement from "./bun-elements/bun-elements";
-import {useVisible} from '../../hooks/use-visible';
-import {fetchCreateOrder} from "../../services/thunks";
-import {addIngredient, increaseIngredient, setTotalPrice} from "../../services/slices";
-import {useDrop} from "react-dnd";
+import { useVisible } from '../../hooks/use-visible';
+import { fetchCreateOrder } from "../../services/thunks";
+import { addIngredient, clearCart, increaseIngredient, setTotalPrice } from "../../services/slices";
+import { useDrop } from "react-dnd";
+import { Preloader } from "../preloader/preloader";
 
 
 const BurgerConstructor = React.memo(() => {
-    const dispatch = useDispatch()
-    const burgerConstructorData = useSelector(state => state.ingredients.cart)
-    const [showOrder, toggleOrderView] = useVisible()
-    const error = useSelector(state => state.ingredients.error)
+    const dispatch = useDispatch();
+    const burgerConstructorData = useSelector(state => state.ingredients.cart);
+    const [showOrder, toggleOrderView] = useVisible();
+    const error = useSelector(state => state.ingredients.error);
+    const { loading } = useSelector(state => state.order);
 
     const addItem = (item) => {
         dispatch(addIngredient(item))
@@ -32,9 +34,10 @@ const BurgerConstructor = React.memo(() => {
         })
     });
 
-    const openOrderModal = async () => {
-        await dispatch(fetchCreateOrder(burgerConstructorData.map(item => item._id)))
+    const openOrderModal = () => {
+        dispatch(fetchCreateOrder(burgerConstructorData.map(item => item._id)))
             .then(() => toggleOrderView())
+            .then(() => dispatch(clearCart()))
     }
 
     const closeOrderModal = () => {
@@ -70,35 +73,39 @@ const BurgerConstructor = React.memo(() => {
         [burgerConstructorData]
     );
 
-
-
     return (
         <>
              <section className={`${styles.constructorSection} pt-25 `}>
                  {!error && <div className={`${styles.list} ${isHover ? styles.isHover : ''}`} ref={dropTarget} >
-                    <div>
-                        <BunElement
-                            ingredient={bunIngredient}
-                            position={'top'}
-                        />
-                    </div>
-                    <div className={styles.saucesMains}>
-                        {notBunIngredients && notBunIngredients.map((ingredient, index) => {
-                            return (
-                                (ingredient.type !== 'bun') ? (
-                                        <NotBunElements
-                                            ingredient={ingredient} index={index} key={ingredient.uuid}
-                                        />
-                                ) : ''
-                            )
-                        })}
-                    </div>
-                    <div>
-                        <BunElement
-                            ingredient={bunIngredient}
-                            position={'bottom'}
-                        />
-                    </div>
+                     {loading
+                         ? <Preloader />
+                         : <>
+                             <div>
+                                 <BunElement
+                                     ingredient={bunIngredient}
+                                     position={'top'}
+                                 />
+                             </div>
+                             <div className={styles.saucesMains}>
+                                 {notBunIngredients && notBunIngredients.map((ingredient, index) => {
+                                     return (
+                                         (ingredient.type !== 'bun') ? (
+                                             <NotBunElements
+                                                 ingredient={ingredient} index={index} key={ingredient.uuid}
+                                             />
+                                         ) : ''
+                                     )
+                                 })}
+                             </div>
+                             <div>
+                                 <BunElement
+                                     ingredient={bunIngredient}
+                                     position={'bottom'}
+                                 />
+                             </div>
+                        </>
+                     }
+
                 </div>}
                 <div>
                     {!error && <SumOrder handleModal={openOrderModal}/>}

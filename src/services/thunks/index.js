@@ -1,33 +1,17 @@
+import { fetchIngredients, fetchCreateOrder } from './ingredients';
 import {
-    getIngredientsLoading,
-    getIngredientsSuccess,
-    getIngredientsError,
-    orderLoading,
-    orderReceived,
-    orderError
-} from '../slices';
-import {getIngredientsData, getOrder} from "../../utils/api-burger";
+    fetchRegister, fetchLogin, fetchLogout, fetchForgotPasswordUser,
+    fetchResetPasswordUser, fetchGetProfileInfo, fetchChangeProfileInfo
+} from './user';
+import { fetchTokenUser } from './token';
 
-export const fetchIngredients = () => async (dispatch) => {
-    dispatch(getIngredientsLoading());
-    await getIngredientsData()
-        .then((data) => {
-            dispatch(getIngredientsSuccess(data));
-        })
-        .catch((e) => {
-            dispatch(getIngredientsError(e.message));
-            console.error(e);
-        });
-}
 
-export const fetchCreateOrder = (ingredients) => async (dispatch) => {
-    dispatch(orderLoading());
-    await getOrder(ingredients)
-        .then((data) => {
-            dispatch(orderReceived(data));
-        })
-        .catch((e) => {
-            dispatch(orderError(e.message));
-            console.error(e);
-        });
+
+export {
+    fetchIngredients, fetchCreateOrder,
+
+    fetchRegister, fetchLogin, fetchLogout, fetchForgotPasswordUser,
+    fetchResetPasswordUser, fetchGetProfileInfo, fetchChangeProfileInfo,
+
+    fetchTokenUser
 }

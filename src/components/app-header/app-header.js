@@ -1,41 +1,48 @@
-import HeaderButton from './header-button/header-button';
-import headerStyles from './app-header.module.css';
-import { BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import HeaderLogo from './header-logo/header-logo';
-import React from 'react';
-import PropTypes from 'prop-types';
+import styles from './app-header.module.css';
+import { BurgerIcon, ListIcon, ProfileIcon, Logo } from '@ya.praktikum/react-developer-burger-ui-components';
+import React, { memo } from 'react';
+import { Link, useLocation } from "react-router-dom";
+import {useSelector} from "react-redux";
 
 
-const AppHeader = React.memo(({currentPage, onChangePage}) => {
+const AppHeader = () => {
+    const pathname = useLocation().pathname;
+    const { isAuthenticated, user } = useSelector(state => state.user)
 
     return (
-        <header className={headerStyles.header} >
-            <HeaderButton 
-                active={currentPage === 'constructor'}
-                icon={BurgerIcon}
-                buttonText="Конструктор"
-                onClick={() => onChangePage('constructor')} 
-            />
-            <HeaderButton 
-                active={currentPage === 'orders'}
-                icon={ListIcon}
-                buttonText="Лента заказов"
-                onClick={() => onChangePage('orders')} 
-            />
-            <HeaderLogo />
-            <HeaderButton 
-                active={currentPage === 'profile'}
-                icon={ProfileIcon}
-                buttonText="Лента заказов"
-                onClick={() => onChangePage('profile')} 
-            />
+        <header className={styles.header} >
+            <nav className={styles.menu}>
+                <div className={styles.menu_item}>
+                    <Link className={`${styles.menu_item_link} p-4 mt-4 mb-4`} to="/">
+                        <BurgerIcon type={pathname === '/' ? 'primary' : 'secondary'} />
+                        <span className={`${pathname !== '/' && "text_color_inactive"} text text_type_main-default ml-2`}>
+                          Конструктор
+                        </span>
+                    </Link>
+                    <Link className={`${styles.menu_item_link} p-4 mt-4 mb-4`} to="/orders">
+                        <ListIcon type={pathname === '/orders' ? 'primary' : 'secondary'} />
+                        <span className={`${pathname !== '/orders' && "text_color_inactive"} text text_type_main-default ml-2`}>
+                          Лента заказов
+                        </span>
+                    </Link>
+                </div>
+                <div className={styles.menu_item}>
+                    <Link className={`${styles.menu_item_link} ${styles.menu_item_logo}`} to="/">
+                        <Logo />
+                    </Link>
+                </div>
+                <div className={styles.menu_item}>
+                    <Link className={`${styles.menu_item_link} p-4 mt-4 mb-4`} to="/profile/">
+                        <ProfileIcon type={pathname.includes('profile') ? 'primary' : 'secondary'} />
+                        <span className={`${!pathname.includes('profile') && "text_color_inactive"} text text_type_main-default ml-2`}>
+                          { isAuthenticated ? user.name : "Личный кабинет" }
+                        </span>
+                    </Link>
+                </div>
+            </nav>
         </header>
     )
-})
-
-AppHeader.propTypes = {
-    currentPage: PropTypes.string,
-    onChangePage: PropTypes.func
 }
 
-export default AppHeader
+
+export default  memo(AppHeader)

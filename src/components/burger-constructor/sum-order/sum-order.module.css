@@ -6,5 +6,9 @@
 
 .currencyIcon {
     display: flex;
-    align-items: 'center'
+    align-items: center;
+}
+
+.authLabel {
+    text-align: right;
 }

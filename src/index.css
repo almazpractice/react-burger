@@ -31,11 +31,7 @@ code {
     monospace;
 }
 
-.containerForBurgers {
-    display: flex;
-    justify-content: center;
-    max-height: calc(100vh - 128px);
-    max-width: 1240px;
-    padding: 0 20px;
-    margin: 0 auto;
+a {
+    text-decoration: none;
+    color: inherit;
 }
